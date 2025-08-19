@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "client": {
+      "rootDirectory": "client",
+      "buildCommand": "npm run build",
+      "outputDirectory": "dist"
+    },
+    "server": {
+      "rootDirectory": "server"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/server/api/$1.js" },
+    { "source": "/(.*)", "destination": "/client/$1" }
+  ]
+}
