@@ -42,8 +42,8 @@ export class AuthController {
         const token = jwt.sign(
           { 
             id: result.id, 
-            korisnickoIme: result.username, 
-            uloga: result.role,
+            username: result.username, 
+            role: result.role,
           }, process.env.JWT_SECRET ?? "", { expiresIn: '6h' });
 
         res.status(200).json({success: true, message: 'Login succesfull', data: token});
@@ -64,7 +64,7 @@ export class AuthController {
    */
   private async registration(req: Request, res: Response): Promise<void> {
     try {
-      const { username, password, role } = req.body;
+      const { username, role, password } = req.body;
       const rezultat = dataValidationAuth(username, password);
 
       if (!rezultat.success) {

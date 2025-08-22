@@ -6,6 +6,7 @@ import db from "../../connection/DbConnectionPool";
 export class UserRepository implements IUserRepository {
   async create(user: User): Promise<User> {
     try {
+      
       const query = `
         INSERT INTO users (username, role, password) 
         VALUES (?, ?, ?)
@@ -20,6 +21,7 @@ export class UserRepository implements IUserRepository {
 
       if (result.insertId) {
         // Vraćamo novog korisnika sa dodeljenim ID-om
+        
         return new User(result.insertId, user.username, user.role, user.password);
       }
 
@@ -52,14 +54,14 @@ export class UserRepository implements IUserRepository {
       const query = `
         SELECT id, username, role, password
         FROM users 
-        WHERE korisnickoIme = ?
+        WHERE username = ?
       `;
 
       const [rows] = await db.execute<RowDataPacket[]>(query, [username]);
 
       if (rows.length > 0) {
         const row = rows[0];
-        return new User(row.id, row.korisnickoIme, row.uloga, row.lozinka);
+        return new User(row.id, row.username, row.role, row.password);
       }
 
       return new User();

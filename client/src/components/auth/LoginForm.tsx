@@ -30,7 +30,7 @@ export function LoginForm({ authApi }: AuthFormProps) {
   };
 
   return (
-    <div className="bg-white/30 backdrop-blur-lg shadow-md rounded-2xl p-10 w-full max-w-md border border-blue-400">
+    <div className="bg-white/50 backdrop-blur-lg shadow-md rounded-3xl p-10 w-full max-w-md border border-black-400">
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Login</h1>
       <form onSubmit={submitForm} className="space-y-4">
         <input

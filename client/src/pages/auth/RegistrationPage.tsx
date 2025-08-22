@@ -8,7 +8,7 @@ interface RegistrationPageProps {
   authApi: IAuthAPIService;
 }
 
-export default function RegistracijaPage({ authApi }: RegistrationPageProps) {
+export default function RegistrationPage({ authApi }: RegistrationPageProps) {
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ export default function RegistracijaPage({ authApi }: RegistrationPageProps) {
   }, [isAuthenticated, navigate, user]);
 
   return (
-    <main className="min-h-screen bg-gradient-to-tr from-slate-600/75 to-orange-800/70 flex items-center justify-center">
+    <main className="min-h-screen bg-gray-800/90 flex items-center justify-center">
       <RegistrationForm authApi={authApi} />
     </main>
   );

@@ -11,7 +11,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const decodeJWT = (token: string): JwtTokenClaims | null => {
     try {
         const decoded = jwtDecode<JwtTokenClaims>(token);
-        
         // Proveri da li token ima potrebna polja
         if (decoded.id && decoded.username && decoded.role) {
             return {
@@ -77,22 +76,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const claims = decodeJWT(newToken);
         
         if (claims && !isTokenExpired(newToken)) {
+            console.log(claims.username, "| |",  claims.role, "| |");
             setToken(newToken);
             setUser({
                 id: claims.id,
-                korisnickoIme: claims.korisnickoIme,
-                uloga: claims.uloga
+                username: claims.username,
+                role: claims.role
             });
-            SačuvajVrednostPoKljuču("authToken", newToken);
+            SaveValueByKey("authToken", newToken);
         } else {
-            console.error('Nevažeći ili istekao token');
+            console.error('Invalid or expired token');
         }
     };
 
     const logout = () => {
         setToken(null);
         setUser(null);
-        ObrišiVrednostPoKljuču("authToken");
+        DeleteValueByKey("authToken");
     };
 
     const isAuthenticated = !!user && !!token;

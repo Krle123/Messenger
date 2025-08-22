@@ -11,10 +11,12 @@ import ControlPanelUserPage from "./pages/control_table/ControlPanelUserPage";
 import ControlpPanelAdminPage from "./pages/control_table/ControlpPanelAdminPage";
 import NotFoundPage from "./pages/not_found/NotFoundPage";
 import { usersApi } from "./api_services/users/UsersAPIService";
+import HomePage from "./pages/home/HomePage";
 
 function App() {
   return (
     <Routes>
+      <Route path="/home" element={<HomePage />} />
       <Route path="/login" element={<LoginPage authApi={authApi} />} />
       <Route path="/register" element={<RegistrationPage authApi={authApi} />} />
       <Route path="/404" element={<NotFoundPage />} />
@@ -38,10 +40,10 @@ function App() {
         />
 
         {/* Preusmerava na dashboard kao default rutu */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Navigate to="/home" replace />} />
 
         {/* Catch-all ruta za nepostojeće stranice */}
-        <Route path="*" element={<Navigate to="/404" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }

@@ -17,6 +17,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const { isAuthenticated, user, isLoading, logout } = useAuth();
   const location = useLocation();
 
+  console.log("ProtectedRoute Auth state:", { isAuthenticated, user, isLoading, path: location.pathname });
+
   const handleLogout = () => {
     DeleteValueByKey("authToken");
     logout();

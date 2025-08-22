@@ -11,6 +11,7 @@ interface LoginPageProps {
 export default function LoginPage({ authApi }: LoginPageProps) {
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
+  console.log("LoginPage Auth state:", { isAuthenticated, user });
 
   useEffect(() => {
     if (isAuthenticated && user) 
@@ -18,7 +19,7 @@ export default function LoginPage({ authApi }: LoginPageProps) {
   }, [isAuthenticated, navigate, user]);
 
   return (
-    <main className="min-h-screen bg-gradient-to-tr from-slate-600/75 to-orange-800/70 flex items-center justify-center">
+    <main className="min-h-screen bg-gray-800/90 flex items-center justify-center">
       <LoginForm authApi={authApi} />
     </main>
   );
