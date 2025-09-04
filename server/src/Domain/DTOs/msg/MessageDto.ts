@@ -1,4 +1,4 @@
-export class Message{
+export class MessageDto{
     public constructor(
         public id: number = 0,
         public idRcv: number = 0,

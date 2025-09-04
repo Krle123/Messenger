@@ -1,4 +1,5 @@
 import { Message } from "../../models/Message";
+import { Unread } from "../../models/Unread";
 
 
 export interface IMessageRepository {
@@ -17,18 +18,40 @@ export interface IMessageRepository {
     getById(id: number): Promise<Message>;
 
     /**
-        * Pronalazi poruku po ID-u posijaoca
-        * @param idRcv - Jedinstveni identifikator poruku
+        * Pronalazi poruku po ID-u primaoca
+        * @param idRcv - Jedinstveni identifikator primaoca
         * @returns Vraća poruku ili prazan objekat ako nije pronađen
     */
-    getByIdRcv(idRcv: number): Promise<Message>;
+    getByIdRcv(idRcv: number): Promise<Message[]>;
 
     /**
         * Pronalazi poruku po ID-u posijaoca
-        * @param idSnd - Jedinstveni identifikator poruku
+        * @param idSnd - Jedinstveni identifikator posiljaoca
         * @returns Vraća poruku ili prazan objekat ako nije pronađen
     */
-    getByIdRcv(idRcv: number): Promise<Message>;
+    getByIdSnd(idSnd: number): Promise<Message[]>;
+
+    /**
+        * Pronalazi poruke u konverzaciji
+        * @param idSnd - Jedinstveni identifikator posiljaoca
+        * @param idRcv - Jedinstveni identifikator primaoca
+        * @returns Vraća poruku ili prazan objekat ako nije pronađen
+    */
+    getByConversation(idSnd: number, idRcv: number): Promise<Message[]>;
+
+    /**
+        * Vraća listu ID-eva korisnika sa kojima je moguce pricati
+        * @param idRcv - Jedinstveni identifikator primaoca
+        * @returns Promise koji vraća niz jedinstvenih ID-eva korisnika koji su kontaktirali određenog primaoca
+    */
+    getContactList(idRcv: number): Promise<number[]>;
+
+    /**
+        * Vraća broj nepročitanih poruka za svakog posiljaoca
+        * @param idRcv - Jedinstveni identifikator primaoca
+        * @returns Promise koji vraća niz objekata tipa Unread, gde svaki objekat sadrži ID pošiljaoca i broj nepročitanih poruka od tog pošiljaoca
+    */
+    getUnreadCount(idRcv: number): Promise<Unread[]>;
 
     /**
         * Vraća sve poruke iz baze podataka
