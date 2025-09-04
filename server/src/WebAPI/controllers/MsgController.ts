@@ -14,11 +14,11 @@ export class MsgController {
     }
 
     private initializeRoutes(): void {
-        this.router.post('/messages/send', this.sendMessage.bind(this));
-        this.router.get('/messages/conversation/:idRcv/:idSnd', this.getConversation.bind(this));
-        this.router.get('/messages/unread/:idRcv', this.getUnreadCount.bind(this));
-        this.router.get('/messages/contacts/:idRcv', this.getContactList.bind(this));
-        this.router.post('/messages/markAsRead/:id', this.markAsRead.bind(this));
+        this.router.post('/send', this.sendMessage.bind(this));
+        this.router.get('/conversation/:idRcv/:idSnd', this.getConversation.bind(this));
+        this.router.get('/unread/:idRcv', this.getUnreadCount.bind(this));
+        this.router.get('/contacts/:idRcv', this.getContactList.bind(this));
+        this.router.post('/markAsRead/:id', this.markAsRead.bind(this));
     }
 
     private async sendMessage(req: Request, res: Response): Promise<void> {

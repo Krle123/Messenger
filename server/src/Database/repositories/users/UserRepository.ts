@@ -67,6 +67,18 @@ export class UserRepository implements IUserRepository {
     }
   }
 
+  async getAllRole(role: string): Promise<User[]> {
+    try {
+      const query = `SELECT * FROM users WHERE role = ? ORDER BY id ASC`;
+      const [rows] = await db.execute<RowDataPacket[]>(query, [role]);
+      return rows.map(
+        (row) => new User(row.id, row.username, row.role, "")
+      );
+    } catch {
+      return [];
+    }
+
+    }
   async getAll(): Promise<User[]> {
     try {
       const query = `SELECT *FROM users ORDER BY id ASC`;

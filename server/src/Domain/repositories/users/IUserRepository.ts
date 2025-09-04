@@ -27,6 +27,12 @@ export interface IUserRepository {
   getByUsername(username: string): Promise<User>;
 
   /**
+   * Vraća sve korisnike sa određenom ulogom iz baze podataka
+   * @param role - Uloga korisnika za filtriranje (npr. "admin", "user")
+   * @returns Promise koji vraća niz korisnika sa datom ulogom
+   */
+  getAllRole(role: string): Promise<User[]>;
+  /**
    * Vraća sve korisnike iz baze podataka
    * @returns Promise koji vraća niz svih korisnika
    */

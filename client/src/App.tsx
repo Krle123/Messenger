@@ -13,6 +13,7 @@ import NotFoundPage from "./pages/not_found/NotFoundPage";
 import { usersApi } from "./api_services/users/UsersAPIService";
 import HomePage from "./pages/home/HomePage";
 import ChatPage from "./pages/chat/ChatPage";
+import { msgAPI } from "./api_services/msg/MsgAPIService";
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
       <Route path="/home" element={<HomePage />} />
       <Route path="/login" element={<LoginPage authApi={authApi} />} />
       <Route path="/register" element={<RegistrationPage authApi={authApi} />} />
-      <Route path="/chat" element={<ChatPage />} />
+      <Route path="/chat" element={<ChatPage msgApi={msgAPI} />} />
       <Route path="/404" element={<NotFoundPage />} />
 
         <Route
@@ -42,7 +43,7 @@ function App() {
         />
 
         {/* Preusmerava na dashboard kao default rutu */}
-        <Route path="/" element={<Navigate to="/chat" replace />} />
+        <Route path="/" element={<Navigate to="/home" replace />} />
 
         {/* Catch-all ruta za nepostojeće stranice */}
         <Route path="*" element={<NotFoundPage />} />

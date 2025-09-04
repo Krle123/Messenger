@@ -1,4 +1,11 @@
-export default function Chat() {
+import type { IMsgAPIService } from "../../api_services/msg/IMsgAPIService";
+import { MessageForm } from "../../components/msg/MessageForm";
+
+interface ChatPageProps {
+  msgApi: IMsgAPIService;
+}
+
+export default function Chat({ msgApi }: ChatPageProps) {
   const username = "Predrag Maslaric";
 
   const messages = [
@@ -52,16 +59,7 @@ export default function Chat() {
           ))}
         </div>
 
-        <div className="flex p-3 border-t bg-gray-50">
-          <input
-            type="text"
-            placeholder="Type a message..."
-            className="flex-1 border rounded-xl px-3 py-2 focus:outline-none"
-          />
-          <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600">
-            Send
-          </button>
-        </div>
+        <MessageForm msgApi={msgApi} />
       </div>
     </main>
   );

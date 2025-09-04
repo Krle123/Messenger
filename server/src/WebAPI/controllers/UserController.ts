@@ -35,6 +35,23 @@ export class UserController {
     }
   }
 
+  private async ContactList(req: Request, res: Response): Promise<void> 
+  {
+    try {
+      const { role } = req.body;
+      const result = await this.userService.getAllRole(role);
+      if(result.length > 0) {
+        res.status(200).json({ success: true, message: 'Contact list fetched successfully', data: result });
+        return;
+      }
+      res.status(200).json({ success: true, message: 'No contacts found', data: result });
+      return;
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  }
+
   /**
    * Getter za router
    */

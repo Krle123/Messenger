@@ -2,11 +2,12 @@ import { MessageDto } from "../../Domain/DTOs/msg/MessageDto";
 import { UnreadDto } from "../../Domain/DTOs/msg/UnreadDto";
 import { Message } from "../../Domain/models/Message";
 import { IMessageRepository } from "../../Domain/repositories/messages/IMessageRepository";
+import { IUserRepository } from "../../Domain/repositories/users/IUserRepository";
 import { IMsgService } from "../../Domain/services/msg/IMsgService";
 
 export class MsgService implements IMsgService {
 
-    public constructor(private messageRepository: IMessageRepository) {}
+    public constructor(private messageRepository: IMessageRepository, private userRepository: IUserRepository) {}
 
     async sendMessage(idRcv: number, idSnd: number, messageContent: string): Promise<MessageDto> {
         const message = await this.messageRepository.create(new Message(0, idRcv, idSnd, messageContent));
