@@ -17,4 +17,12 @@ export const usersApi: IUsersAPIService = {
       return [];
     }
   },
+  async getUserById(id: number): Promise<UserDto> {
+    try {
+      const res = await axios.get<UserDto>(`${API_URL}/${id}`);
+      return res.data;
+    } catch {
+      return Promise.reject("User not found");
+    }
+  }
 };

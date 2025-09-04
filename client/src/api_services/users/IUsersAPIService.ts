@@ -5,4 +5,5 @@ import type { UserDto } from "../../models/users/UserDto";
  */
 export interface IUsersAPIService {
     getAllUsers(token: string): Promise<UserDto[]>;
+    getUserById(id: number): Promise<UserDto>;
 }

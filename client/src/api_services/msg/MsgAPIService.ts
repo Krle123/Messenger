@@ -51,7 +51,7 @@ export const msgAPI : IMsgAPIService =
         }
     },
 
-    getUnreadCount(idRcv: number): Promise<number | null> {
+    async getUnreadCount(idRcv: number): Promise<number | null> {
         try {
             const res = axios.get<number>(`${API_URL}messages/unread/${idRcv}`);
             return res.then(response => response.data);
@@ -65,7 +65,7 @@ export const msgAPI : IMsgAPIService =
         }
     },
 
-    getContactList(idRcv: number): Promise<number[] | null> {
+    async getContactList(idRcv: number): Promise<number[] | null> {
         try {
             const res = axios.get<number[]>(`${API_URL}messages/contacts/${idRcv}`);
             return res.then(response => response.data);

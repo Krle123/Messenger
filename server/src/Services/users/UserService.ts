@@ -13,6 +13,11 @@ export class UserService implements IUserService {
     );
     return usersDto;
   }
+
+  async getUserById(id: number): Promise<UserDto> {
+    const user: User = await this.userRepository.getById(id);
+    return new UserDto(user.id, user.username, user.role);
+  }
   
   async getAllUsers(): Promise<UserDto[]> {
     const users: User[] = await this.userRepository.getAll();

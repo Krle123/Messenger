@@ -4,7 +4,7 @@ import type { MsgFormProps } from "../../types/props/msg_form_props/MsgFormProps
 
 export function MessageForm({msgApi}: MsgFormProps) {
     const [idRcv, setIdRcv] = useState(0);
-    const [idSnd, setIdSnd] = useState(0);
+    const [idSnd, setIdSnd] = useState(1);
     const [messageContent, setMessageContent] = useState("");
     const [error, setError] = useState("");
 

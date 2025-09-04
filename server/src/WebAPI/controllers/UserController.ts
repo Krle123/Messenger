@@ -17,6 +17,7 @@ export class UserController {
   private initializeRoutes(): void {
     // ostale metode, npr. /api/v1/user/1 <--- user po ID-ju 1
     this.router.get("/users", authenticate, authorize("admin"), this.users.bind(this));
+    this.router.get("/user", this.getUserById.bind(this));
   }
 
   /**
@@ -35,6 +36,22 @@ export class UserController {
     }
   }
 
+  private async getUserById(req: Request, res: Response): Promise<void> {
+    try {
+      const id = parseInt(req.params.id, 10);
+      const userData: UserDto = await this.userService.getUserById(id);
+
+      if (userData) {
+        res.status(200).json(userData);
+        return;
+      }
+      res.status(404).json({ success: false, message: 'User not found' });
+      return;
+    }
+    catch (error) {
+      res.status(500).json({ success: false, message: error });
+    }
+  }
   private async ContactList(req: Request, res: Response): Promise<void> 
   {
     try {

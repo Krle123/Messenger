@@ -15,6 +15,7 @@ export class MsgController {
 
     private initializeRoutes(): void {
         this.router.post('/send', this.sendMessage.bind(this));
+        this.router.get('/test', (req, res) => res.json({ ok: true }));
         this.router.get('/conversation/:idRcv/:idSnd', this.getConversation.bind(this));
         this.router.get('/unread/:idRcv', this.getUnreadCount.bind(this));
         this.router.get('/contacts/:idRcv', this.getContactList.bind(this));
@@ -23,6 +24,7 @@ export class MsgController {
 
     private async sendMessage(req: Request, res: Response): Promise<void> {
         try {
+            console.log("sendMessage hit:", req.body); // 👈 log input
             const { idRcv, idSnd, messageContent } = req.body;
 
             const rezultat = dataValidationMessage(messageContent);
