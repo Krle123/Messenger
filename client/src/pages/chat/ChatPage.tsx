@@ -17,6 +17,7 @@ export default function Chat() {
     { id: 13, sender: "user", text: "aaaaaaaaaaaaaaaaaaa" },
     { id: 14, sender: "user", text: "aaaaaaaaaaaaaaaaaaa" },
     { id: 15, sender: "other", text: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    { id: 16, sender: "other", text: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
   ];
 
   return (
