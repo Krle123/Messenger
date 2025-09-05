@@ -37,7 +37,7 @@ export interface IMessageRepository {
         * @param idRcv - Jedinstveni identifikator primaoca
         * @returns Vraća poruku ili prazan objekat ako nije pronađen
     */
-    getByConversation(idSnd: number, idRcv: number): Promise<Message[]>;
+    getByConversation(idUser: number, idConversationPartner: number): Promise<Message[]>;
 
     /**
         * Vraća listu ID-eva korisnika sa kojima je moguce pricati

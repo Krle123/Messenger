@@ -15,8 +15,7 @@ export class MsgController {
 
     private initializeRoutes(): void {
         this.router.post('/send', this.sendMessage.bind(this));
-        this.router.get('/test', (req, res) => res.json({ ok: true }));
-        this.router.get('/conversation/:idRcv/:idSnd', this.getConversation.bind(this));
+        this.router.get('/conversation/:idUser/:idConversationPartner', this.getConversation.bind(this));
         this.router.get('/unread/:idRcv', this.getUnreadCount.bind(this));
         this.router.get('/contacts/:idRcv', this.getContactList.bind(this));
         this.router.post('/markAsRead/:id', this.markAsRead.bind(this));
@@ -24,7 +23,6 @@ export class MsgController {
 
     private async sendMessage(req: Request, res: Response): Promise<void> {
         try {
-            console.log("sendMessage hit:", req.body); // 👈 log input
             const { idRcv, idSnd, messageContent } = req.body;
 
             const rezultat = dataValidationMessage(messageContent);
@@ -48,8 +46,8 @@ export class MsgController {
 
     private async getConversation(req: Request, res: Response): Promise<void> {
         try {
-            const { idRcv, idSnd } = req.body;
-            const result = await this.msgService.getConversation(idRcv, idSnd);
+            const { idUser, idConversationPartner } = req.params;
+            const result = await this.msgService.getConversation(Number(idUser), Number(idConversationPartner));
             if(result.length > 0) {
                 res.status(200).json({ success: true, message: 'Conversation fetched successfully', data: result });
                 return;
@@ -62,8 +60,8 @@ export class MsgController {
 
     private async getUnreadCount(req: Request, res: Response): Promise<void> {
         try {
-            const { idRcv } = req.body;
-            const result = await this.msgService.getUnreadCount(idRcv);
+            const { idRcv } = req.params;
+            const result = await this.msgService.getUnreadCount(Number(idRcv));
 
             if(result.length > 0) 
             {
@@ -96,9 +94,11 @@ export class MsgController {
 
     private async markAsRead(req: Request, res: Response): Promise<void> {
         try {
-            const { id } = req.body;
-            const result = await this.msgService.markAsRead(id);
+            const { id } = req.params;
+            console.log("Marking message as read:", id);
+            const result = await this.msgService.markAsRead(Number(id));
             if(result) {
+                console.log("Message marked as read:", id);
                 res.status(200).json({ success: true, message: 'Message marked as read successfully' });
                 return;
             }

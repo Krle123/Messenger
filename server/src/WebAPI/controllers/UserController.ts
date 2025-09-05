@@ -16,7 +16,7 @@ export class UserController {
 
   private initializeRoutes(): void {
     // ostale metode, npr. /api/v1/user/1 <--- user po ID-ju 1
-    this.router.get("/users", authenticate, authorize("admin"), this.users.bind(this));
+    this.router.get("/users", this.users.bind(this));
     this.router.get("/user", this.getUserById.bind(this));
   }
 
@@ -28,7 +28,7 @@ export class UserController {
     try {
       const usersData: UserDto[] =
         await this.userService.getAllUsers();
-
+      console.log("Users fetched:", usersData);
       res.status(200).json(usersData);
       return;
     } catch (error) {

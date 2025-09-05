@@ -1,47 +1,57 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { dataValidationMessage } from "../../api_services/validators/msg/MessageValidator";
 import type { MsgFormProps } from "../../types/props/msg_form_props/MsgFormProps";
+import { getLoggedInUser } from "../../helpers/loggedInUser";
 
-export function MessageForm({msgApi}: MsgFormProps) {
-    const [idRcv, setIdRcv] = useState(0);
-    const [idSnd, setIdSnd] = useState(1);
+export function MessageForm({msgApi, otherUserId}: MsgFormProps) {
+    const [idRcv, setIdRcv] = useState(1);
+    const [idSnd, setIdSnd] = useState(2);
     const [messageContent, setMessageContent] = useState("");
     const [error, setError] = useState("");
 
 
-    const submitForm = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        const validation = dataValidationMessage(messageContent);
-        if (!validation.success) {
-            setError(validation.message ?? "Invalid data");
-            return;
-        }
-
-        const response = await msgApi.sendMessage(idRcv, idSnd, messageContent); // Example IDs
-        if (!response.success || !response.data) {
-            setError(response.message);
-            setMessageContent("");
-            return;
-        }
+    const handleSend = async (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+        if (!messageContent.trim()) return;
+        await msgApi.sendMessage(idRcv, idSnd, messageContent);
 
         setMessageContent("");
-    };
+  };
 
-    return (
-        <form onSubmit={submitForm}>
-            <div className="flex p-3 border-t bg-gray-50">
-            <input
-                type="text"
-                placeholder="Type a message..."
-                value={messageContent}
-                onChange={(e) => setMessageContent(e.target.value)}
-                className="flex-1 border rounded-xl px-3 py-2 focus:outline-none"
-            />
-            <button type="submit" className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600">
-                Send
-            </button>
-            </div>
-        </form>
-    );
+    useEffect(() => {
+        const user = getLoggedInUser();
+        if (user) {
+            setIdSnd(user.id);                                             
+            setIdRcv(otherUserId);
+        }
+        else {
+            setError("User not logged in");
+        }
+    }, []);
+
+  return (
+    <form
+      onSubmit={handleSend} // 👈 handles Enter press
+      className="p-3 border-t flex items-center gap-2"
+    >
+      <input
+        type="text"
+        value={messageContent}
+        onChange={(e) => setMessageContent(e.target.value)}
+        placeholder="Type a message..."
+        className="flex-1 border rounded-xl px-3 py-2 focus:outline-none"
+      />
+      <button
+        type="submit" // 👈 submit on Enter
+        disabled={!messageContent.trim()}
+        className={`px-4 py-2 rounded-xl font-semibold ${
+          messageContent.trim()
+            ? "bg-blue-500 text-white hover:bg-blue-600"
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+        }`}
+      >
+        Send
+      </button>
+    </form>
+  );
 }

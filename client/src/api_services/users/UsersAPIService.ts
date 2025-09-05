@@ -5,13 +5,11 @@ import type { IUsersAPIService } from "./IUsersAPIService";
 const API_URL: string = import.meta.env.VITE_API_URL + "user";
 
 export const usersApi: IUsersAPIService = {
-  async getAllUsers(token: string): Promise<UserDto[]> {
+  async getAllUsers(): Promise<UserDto[]> {
     try {
-      const res = await axios.get<UserDto[]>(`${API_URL}s`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      console.log("Fetching all users");
+      const res = await axios.get<UserDto[]>(`${API_URL}s`, {});
+      console.log("Users fetched:", res.data);
       return res.data;
     } catch {
       return [];

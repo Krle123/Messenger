@@ -20,8 +20,8 @@ export class MsgService implements IMsgService {
         return new MessageDto();
     }
 
-    async getConversation(idRcv: number, idSnd: number): Promise<MessageDto[]> {
-        const messages = await this.messageRepository.getByConversation(idRcv, idSnd);
+    async getConversation(idUser: number, idConversationPartner: number): Promise<MessageDto[]> {
+        const messages = await this.messageRepository.getByConversation(idUser, idConversationPartner);
 
         if(messages.length > 0)
         {
@@ -51,14 +51,17 @@ export class MsgService implements IMsgService {
     }
 
     async markAsRead(id: number): Promise<boolean> {
+        console.log("Marking message as read in service:", id);
         const message = await this.messageRepository.getById(id);
-
         if(message.id !== 0)
         {
             message.msgRead = true;
+            console.log("Updating message to read:", message);
             const updatedMessage = await this.messageRepository.update(message);
+            console.log("Updated message:", updatedMessage);
             return updatedMessage.id !== 0;
         }
+        console.log("Message not found with id:", id);
         return false;
     }
 }

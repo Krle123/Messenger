@@ -36,12 +36,12 @@ export class MessageRepository implements IMessageRepository {
     
     async getById(id: number): Promise<Message> {
         try {
-            const query = `SELECT * FROM messages WHERE id = ?`;
+            const query = `SELECT * FROM messages WHERE idMsg = ?`;
             const [rows] = await db.execute<RowDataPacket[]>(query, [id]);
 
             if (rows.length > 0) {
                 const row = rows[0];
-                return new Message(row.id, row.idRcv, row.idSnd, row.messageContent, row.msgTime, row.msgRead);
+                return new Message(row.idMsg, row.idRcv, row.idSnd, row.messageContent, row.msgTime, row.msgRead);
             }
 
             return new Message();
@@ -56,7 +56,7 @@ export class MessageRepository implements IMessageRepository {
             const query = `SELECT * FROM messages WHERE idRcv = ?`;
             const [rows] = await db.execute<RowDataPacket[]>(query, [idRcv]);
             
-            return rows.map(row => new Message(row.id, row.idRcv, row.idSnd, row.messageContent, row.msgTime, row.msgRead));
+            return rows.map(row => new Message(row.idMsg, row.idRcv, row.idSnd, row.messageContent, row.msgTime, row.msgRead));
         }
         catch {
             return [];
@@ -68,19 +68,18 @@ export class MessageRepository implements IMessageRepository {
             const query = `SELECT * FROM messages WHERE idSnd = ?`;
             const [rows] = await db.execute<RowDataPacket[]>(query, [idSnd]);
 
-            return rows.map(row => new Message(row.id, row.idRcv, row.idSnd, row.messageContent, row.msgTime, row.msgRead));
+            return rows.map(row => new Message(row.idMsg, row.idRcv, row.idSnd, row.messageContent, row.msgTime, row.msgRead));
         }
         catch {
             return [];
         }
     }
 
-    async getByConversation(idSnd: number, idRcv: number): Promise<Message[]> {
+    async getByConversation(idUser: number, idConversationPartner: number): Promise<Message[]> {
         try {
-            const query = `SELECT * FROM messages WHERE (idSnd = ? AND idRcv = ?) ORDER BY msgTime ASC`;
-            const [rows] = await db.execute<RowDataPacket[]>(query, [idSnd, idRcv]);
-
-            return rows.map(row => new Message(row.id, row.idRcv, row.idSnd, row.messageContent, row.msgTime, row.msgRead));
+            const query = `SELECT * FROM messages WHERE (idSnd = ? AND idRcv = ?) OR (idSnd = ? AND idRcv = ?) ORDER BY msgTime ASC`;
+            const [rows] = await db.execute<RowDataPacket[]>(query, [idConversationPartner, idUser, idUser, idConversationPartner]);
+            return rows.map(row => new Message(row.idMsg, row.idRcv, row.idSnd, row.messageContent, row.msgTime, row.msgRead));
         }
         catch {
             return [];
@@ -121,7 +120,7 @@ export class MessageRepository implements IMessageRepository {
             const query = `SELECT * FROM messages ORDER BY id ASC`;
             const [rows] = await db.execute<RowDataPacket[]>(query);
         
-            return rows.map(row => new Message(row.id, row.idRcv, row.idSnd, row.messageContent, row.msgTime, row.msgRead));
+            return rows.map(row => new Message(row.idMsg, row.idRcv, row.idSnd, row.messageContent, row.msgTime, row.msgRead));
         } 
         catch 
         {
@@ -134,7 +133,7 @@ export class MessageRepository implements IMessageRepository {
             const query = `
                 UPDATE messages 
                 SET idRcv = ?, idSnd = ?, messageContent = ?, msgRead = ?
-                WHERE id = ?
+                WHERE idMsg = ?
             `;
             const [result] = await db.execute<ResultSetHeader>(query, [
                 message.idRcv,

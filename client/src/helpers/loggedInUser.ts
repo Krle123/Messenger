@@ -8,15 +8,16 @@ export interface LoggedInUser {
   role?: string;
 }
 
-export function getLoggedInUser(): LoggedInUser | null {
-  const token = ReadValueByKey("token");
-  if (!token) return null;
-
-  try {
-    const decoded = jwtDecode<LoggedInUser>(token);
-    return decoded;
-  } catch (error) {
-    console.error("Failed to decode JWT:", error);
-    return null;
+export function getLoggedInUser(): LoggedInUser {
+  const token = ReadValueByKey("authToken");
+  if (token)
+  {
+    try {
+      const decoded = jwtDecode<LoggedInUser>(token);
+      return decoded;
+    } catch (error) {
+      console.error("Failed to decode JWT:", error);
+    }
   }
+  return { id: 0, username: "" };
 }

@@ -17,7 +17,7 @@ export interface IMsgService {
      * @param idSnd - ID pošiljaoca poruke.
      * @returns Niz poruka između dva korisnika.
      */
-    getConversation(idRcv: number, idSnd: number): Promise<MessageDto[]>;
+    getConversation(idUser: number, idConversationPartner: number): Promise<MessageDto[]>;
 
     /**
      * Dohvata broj nepročitanih poruka za određenog korisnika.

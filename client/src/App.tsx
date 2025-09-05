@@ -7,13 +7,22 @@ import { authApi } from "./api_services/auth/AuthAPIService";
 import { ProtectedRoute } from "./components/protected_route/ProtectedRoute";
 import LoginPage from "./pages/auth/LoginPage";
 import RegistrationPage from "./pages/auth/RegistrationPage";
-import ControlPanelUserPage from "./pages/control_table/ControlPanelUserPage";
-import ControlpPanelAdminPage from "./pages/control_table/ControlpPanelAdminPage";
 import NotFoundPage from "./pages/not_found/NotFoundPage";
 import { usersApi } from "./api_services/users/UsersAPIService";
 import HomePage from "./pages/home/HomePage";
 import ChatPage from "./pages/chat/ChatPage";
 import { msgAPI } from "./api_services/msg/MsgAPIService";
+import { ChatSelection } from "./pages/chat/ChatSelectionPage";
+
+/*        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <ControlpPanelAdminPage usersApi={usersApi} /> 
+            </ProtectedRoute>
+          }
+        /> 
+        */
 
 function App() {
   return (
@@ -22,25 +31,8 @@ function App() {
       <Route path="/login" element={<LoginPage authApi={authApi} />} />
       <Route path="/register" element={<RegistrationPage authApi={authApi} />} />
       <Route path="/chat" element={<ChatPage msgApi={msgAPI} />} />
+      <Route path="/select" element={<ChatSelection usersApi={usersApi} msgApi={msgAPI} />} />
       <Route path="/404" element={<NotFoundPage />} />
-
-        <Route
-          path="/user-dashboard"
-          element={
-            <ProtectedRoute requiredRole="user">
-              <ControlPanelUserPage />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/admin-dashboard"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <ControlpPanelAdminPage usersApi={usersApi} /> 
-            </ProtectedRoute>
-          }
-        />
 
         {/* Preusmerava na dashboard kao default rutu */}
         <Route path="/" element={<Navigate to="/home" replace />} />

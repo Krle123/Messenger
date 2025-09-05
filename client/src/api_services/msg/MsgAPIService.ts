@@ -2,6 +2,7 @@ import axios from "axios";
 import type { IMsgAPIService } from "./IMsgAPIService";
 import type { MessageDto } from "../../models/msg/MessageDto";
 import type { MsgResponse } from "../../types/msg/MsgResponse";
+import type { UnreadDto } from "../../models/msg/UnreadDto";
 
 
 const API_URL: string = import.meta.env.VITE_API_URL;
@@ -10,9 +11,7 @@ export const msgAPI : IMsgAPIService =
 {
     async sendMessage(idRcv: number, idSnd: number, messageContent: string): Promise<MsgResponse> {
         try {
-            console.log(`${API_URL}messages/send`);
             const res = await axios.post(`${API_URL}messages/send`, { idRcv, idSnd, messageContent });
-            console.log(`${API_URL}messages/send`);
             return res.data;
         } catch (error) {
             let message = "An error has occurred while sending the message.";
@@ -23,9 +22,10 @@ export const msgAPI : IMsgAPIService =
         }
     },
 
-    async getConversation(idRcv: number, idSnd: number): Promise<MessageDto[] | null> {
+    async getConversation(idUser: number, idConversationPartner: number): Promise<MessageDto[]> {
         try {
-            const res = await axios.get<MessageDto[]>(`${API_URL}messages/conversation/${idRcv}/${idSnd}`);
+            console.log("Fetching conversation between", idUser, "and", idConversationPartner);
+            const res = await axios.get<MessageDto[]>(`${API_URL}messages/conversation/${idUser}/${idConversationPartner}`);
             return res.data;
         } catch (error) {
             let message = "An error has occurred while fetching messages.";
@@ -33,7 +33,7 @@ export const msgAPI : IMsgAPIService =
                 message = error.response?.data?.message || message;
             }
             console.error(message);
-            return null;
+            return Promise.resolve([]);
         }
     },
 
@@ -51,9 +51,9 @@ export const msgAPI : IMsgAPIService =
         }
     },
 
-    async getUnreadCount(idRcv: number): Promise<number | null> {
+    async getUnreadCount(idRcv: number): Promise<UnreadDto[]> {
         try {
-            const res = axios.get<number>(`${API_URL}messages/unread/${idRcv}`);
+            const res = axios.get<UnreadDto[]>(`${API_URL}messages/unread/${idRcv}`);
             return res.then(response => response.data);
         } catch (error) {
             let message = "An error has occurred while fetching unread messages.";
@@ -61,7 +61,7 @@ export const msgAPI : IMsgAPIService =
                 message = error.response?.data?.message || message;
             }
             console.error(message);
-            return Promise.resolve(null);
+            return Promise.resolve([]);
         }
     },
 
