@@ -1,11 +1,13 @@
 import { jwtDecode } from "jwt-decode";
 import { ReadValueByKey, DeleteValueByKey } from "../../../helpers/local_storage";
 import { useAuth } from "../../../hooks/auth/useAuthHook";
+import { useNavigate } from "react-router-dom";
 import type { JwtTokenClaims } from "../../../types/auth/JwtTokenClaims";
 
 export function UserInfo() {
   const token = ReadValueByKey("authToken");
   const { logout } = useAuth();
+  const navigate = useNavigate();
 
   if (!token) return null;
 
@@ -14,6 +16,7 @@ export function UserInfo() {
   const handleLogout = () => {
     DeleteValueByKey("authToken");
     logout();
+    navigate("/login");
   };
 
   return (
@@ -31,7 +34,7 @@ export function UserInfo() {
         onClick={handleLogout}
         className="mt-8 px-4 bg-red-700/60 hover:bg-red-700/70 text-white py-2 rounded-xl  transition"
       >
-        Exit control table
+        Log Out
       </button>
     </div>
   );

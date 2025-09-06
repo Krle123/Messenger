@@ -79,6 +79,11 @@ export function ChatSelection({usersApi, msgApi}: ChatSelectionProps) {
           <h2 className="text-center font-semibold text-lg p-3 border-b bg-gray-100">
             Select a Chat
           </h2>
+          <button className="p-2 rounded-full hover:bg-gray-300 justify-self-end">
+            <a href="/account">
+              <img src="/account.png" alt="Account" className="w-5 h-5" />
+            </a>
+          </button>
           <div className="w-9" />
         </div>
         <div className="p-4">

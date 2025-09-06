@@ -13,6 +13,7 @@ import HomePage from "./pages/home/HomePage";
 import ChatPage from "./pages/chat/ChatPage";
 import { msgAPI } from "./api_services/msg/MsgAPIService";
 import { ChatSelection } from "./pages/chat/ChatSelectionPage";
+import { AccountPage } from "./pages/account/AccountPage";
 
 /*        <Route
           path="/admin-dashboard"
@@ -32,6 +33,7 @@ function App() {
       <Route path="/register" element={<RegistrationPage authApi={authApi} />} />
       <Route path="/chat" element={<ChatPage msgApi={msgAPI} />} />
       <Route path="/select" element={<ChatSelection usersApi={usersApi} msgApi={msgAPI} />} />
+      <Route path="/account" element={<AccountPage/>} />
       <Route path="/404" element={<NotFoundPage />} />
 
         {/* Preusmerava na dashboard kao default rutu */}
