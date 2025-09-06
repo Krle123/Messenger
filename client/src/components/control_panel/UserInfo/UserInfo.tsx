@@ -21,7 +21,7 @@ export function UserInfo() {
 
   return (
     <div className="bg-white/30 backdrop-blur-lg shadow-md rounded-2xl p-10 w-full max-w-2xl border border-gray-300">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Control Panel</h1>
+      <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Account Settings</h1>
 
       <div className="space-y-3 text-lg text-gray-800">
         <p><strong>ID:</strong> {id}</p>

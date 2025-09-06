@@ -48,6 +48,27 @@ export function RegistrationForm({ authApi }: AuthFormProps) {
           onChange={(e) => setPassword(e.target.value)}
           className="w-full bg-white/40 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+         <input
+          type="text"
+          placeholder="Name"
+          //value={username}
+          //onChange={(e) => setUsername(e.target.value)}
+          className="w-full bg-white/40 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+         <input
+          type="text"
+          placeholder="Last Name"
+          //value={username}
+          //onChange={(e) => setUsername(e.target.value)}
+          className="w-full bg-white/40 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+         <input
+          type="text"
+          placeholder="Phone Number"
+          //value={username}
+          //onChange={(e) => setUsername(e.target.value)}
+          className="w-full bg-white/40 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
         <select
           value={role}
           onChange={(e) => setRole(e.target.value)}
