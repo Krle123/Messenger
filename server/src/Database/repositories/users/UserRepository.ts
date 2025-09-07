@@ -15,12 +15,12 @@ export class UserRepository implements IUserRepository {
       const [result] = await db.execute<ResultSetHeader>(query, [
         user.username,
         user.role,
-        user.password,
+        user.password
       ]);
 
 
       if (result.insertId) {  
-        return new User(result.insertId, user.username, user.role, user.password);
+        return new User(result.insertId, user.username, user.role, user.password, user.firstName, user.lastName, user.phone);
       }
       return new User();
     } catch (error) {
@@ -36,7 +36,7 @@ export class UserRepository implements IUserRepository {
 
       if (rows.length > 0) {
         const row = rows[0];
-        return new User(row.id, row.username, row.role, row.password);
+        return new User(row.id, row.username, row.role, row.password, row.firstName, row.lastName, row.phone);
       }
 
       return new User();
@@ -85,7 +85,7 @@ export class UserRepository implements IUserRepository {
       const [rows] = await db.execute<RowDataPacket[]>(query);
 
       return rows.map(
-        (row) => new User(row.id, row.username, row.role, row.password)
+        (row) => new User(row.id, row.username, row.role, row.password, row.firstName, row.lastName, row.phone)
       );
     } catch {
       return [];
@@ -96,7 +96,7 @@ export class UserRepository implements IUserRepository {
     try {
       const query = `
         UPDATE users 
-        SET username = ?, password = ?
+        SET username = ?, password = ?, firstName = ?, lastName = ?, phone = ?
         WHERE id = ?
       `;
 
@@ -104,6 +104,9 @@ export class UserRepository implements IUserRepository {
         user.username,
         user.password,
         user.role,
+        user.firstName,
+        user.lastName,
+        user.phone,
         user.id,
       ]);
 

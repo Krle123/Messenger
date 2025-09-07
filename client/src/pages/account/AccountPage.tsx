@@ -1,4 +1,4 @@
-import { UserInfo } from "../../components/control_panel/UserInfo/UserInfo";
+import { UserInfo } from "../../components/user/UserInfo";
 
 export function AccountPage() {
     return (

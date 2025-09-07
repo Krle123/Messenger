@@ -7,9 +7,9 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(50) UNIQUE NOT NULL,
     role VARCHAR(15) NOT NULL,
     password VARCHAR(500) NOT NULL,
-    firstname VARCHAR(50) NOT NULL,
-    surname VARCHAR(50) NOT NULL,
-    phone VARCHAR(15) NOT NULL
+    firstName VARCHAR(50) NOT NULL DEFAULT '-',
+    lastName VARCHAR(50) NOT NULL DEFAULT '-',
+    phone VARCHAR(15) NOT NULL DEFAULT '-'
 );
 
 CREATE TABLE IF NOT EXISTS messages (
