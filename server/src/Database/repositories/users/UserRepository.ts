@@ -8,8 +8,8 @@ export class UserRepository implements IUserRepository {
     try {
       
       const query = `
-        INSERT INTO users (username, role, password) 
-        VALUES (?, ?, ?)
+        INSERT INTO users (username, role, password, firstname, surname, phone) 
+        VALUES (?, ?, ?, ?, ?, ?)
       `;
 
       const [result] = await db.execute<ResultSetHeader>(query, [
@@ -96,7 +96,7 @@ export class UserRepository implements IUserRepository {
     try {
       const query = `
         UPDATE users 
-        SET username = ?, password = ? 
+        SET username = ?, password = ?
         WHERE id = ?
       `;
 

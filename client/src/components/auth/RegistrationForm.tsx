@@ -8,6 +8,9 @@ export function RegistrationForm({ authApi }: AuthFormProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
   const { login } = useAuth();
 
@@ -51,22 +54,22 @@ export function RegistrationForm({ authApi }: AuthFormProps) {
          <input
           type="text"
           placeholder="Name"
-          //value={username}
-          //onChange={(e) => setUsername(e.target.value)}
+          value={firstname}
+          onChange={(e) => setFirstname(e.target.value)}
           className="w-full bg-white/40 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
          <input
           type="text"
           placeholder="Last Name"
-          //value={username}
-          //onChange={(e) => setUsername(e.target.value)}
+          value={lastname}
+          onChange={(e) => setLastname(e.target.value)}
           className="w-full bg-white/40 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
          <input
           type="text"
           placeholder="Phone Number"
-          //value={username}
-          //onChange={(e) => setUsername(e.target.value)}
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
           className="w-full bg-white/40 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         <select
