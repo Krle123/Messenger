@@ -3,5 +3,8 @@ export class UserDto {
     public id: number = 0,
     public username: string = "",
     public role: string = "user",
+    public firstName: string = "",
+    public lastName: string = "",
+    public phone: string = ""
   ) {}
 }

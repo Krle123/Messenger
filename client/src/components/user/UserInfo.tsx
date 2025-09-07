@@ -1,9 +1,10 @@
 import { jwtDecode } from "jwt-decode";
 import { useState } from "react";
-import { ReadValueByKey, DeleteValueByKey } from "../../../helpers/local_storage";
-import { useAuth } from "../../../hooks/auth/useAuthHook";
+import { ReadValueByKey, DeleteValueByKey } from "../../helpers/local_storage";
+import { useAuth } from "../../hooks/auth/useAuthHook";
 import { useNavigate } from "react-router-dom";
-import type { JwtTokenClaims } from "../../../types/auth/JwtTokenClaims";
+import type { JwtTokenClaims } from "../../types/auth/JwtTokenClaims";
+import { userInfoAPI } from "../../api_services/info/UserInfoAPIService";
 
 export function UserInfo() {
   const token = ReadValueByKey("authToken");
@@ -13,12 +14,14 @@ export function UserInfo() {
   if (!token) return null;
 
   const { id: initialId, username: initialUsername, role } = jwtDecode<JwtTokenClaims>(token);
+ 
 
-  const id = initialId; // ID is not editable
-  const [username, setUsername] = useState(initialUsername);
-  const [firstName, setFirstName] = useState("-"); 
-  const [lastName, setLastName] = useState("-"); 
-  const [phone, setPhone] = useState("-");
+  const id = initialId; 
+  const username = initialUsername; 
+  const [firstName, setFirstName] = useState(""); 
+  const [lastName, setLastName] = useState(""); 
+  const [phone, setPhone] = useState("");
+  const [error, setError] = useState("");
 
   const handleLogout = () => {
     DeleteValueByKey("authToken");
@@ -26,31 +29,24 @@ export function UserInfo() {
     navigate('/login');
   };
 
-  const handleSave = () => {
+  const handleSave =  async (e: React.FormEvent) => {
+    e.preventDefault();
 
-    
+    const response = await userInfoAPI.updateUserInfo(id, firstName, lastName, phone);
+    if (response.success) {
+      navigate('/select');
+    }
+    else {
+      setError(response.message);
+      setFirstName("");
+      setLastName("");
+      setPhone("");
+    }
   };
 
   const handleCancel = () => {
-    setUsername(initialUsername);
     navigate('/select');
   };
-
-  const onUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
-  };
-
-  const onFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFirstName(e.target.value);
-  };
-
-  const onLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLastName(e.target.value);
-  };
-
-  const onPhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhone(e.target.value);
-  }
 
   return (
     <div className="bg-white/30 backdrop-blur-lg shadow-md rounded-2xl p-10 w-full max-w-2xl border border-gray-300">
@@ -73,8 +69,8 @@ export function UserInfo() {
             id="user-username"
             type="text"
             value={username}
-            onChange={onUsernameChange}
-            className="w-full bg-gray-300/80 text-gray-900 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
+            readOnly
+            className="w-full bg-gray-300/80 text-gray-400 uppercase px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
           />
         </div>
         <div>
@@ -83,7 +79,7 @@ export function UserInfo() {
             id="user-firstname"
             type="text"
             value={firstName}
-            onChange={onFirstNameChange}
+            onChange={(e) => setFirstName(e.target.value)}
             className="w-full bg-gray-300/80 text-gray-900 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
           />
         </div>
@@ -93,7 +89,7 @@ export function UserInfo() {
             id="user-lastname"
             type="text"
             value={lastName}
-            onChange={onLastNameChange}
+            onChange={(e) => setLastName(e.target.value)}
             className="w-full bg-gray-300/80 text-gray-900 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
           />
         </div>
@@ -103,7 +99,7 @@ export function UserInfo() {
             id="user-phone"
             type="text"
             value={phone}
-            onChange={onPhoneChange}
+            onChange={(e) => setPhone(e.target.value)}
             className="w-full bg-gray-300/80 text-gray-900 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
           />
         </div>
