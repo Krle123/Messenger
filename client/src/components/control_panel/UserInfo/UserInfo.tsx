@@ -16,13 +16,16 @@ export function UserInfo() {
 
   const id = initialId; // ID is not editable
   const [username, setUsername] = useState(initialUsername);
-  const [isDirty, setIsDirty] = useState(false);
+  const [firstName, setFirstName] = useState("-"); 
+  const [lastName, setLastName] = useState("-"); 
+  const [phone, setPhone] = useState("-");
 
   const handleLogout = () => {
     DeleteValueByKey("authToken");
     logout();
     navigate('/login');
   };
+
   const handleSave = () => {
 
     
@@ -37,6 +40,18 @@ export function UserInfo() {
     setUsername(e.target.value);
   };
 
+  const onFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFirstName(e.target.value);
+  };
+
+  const onLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLastName(e.target.value);
+  };
+
+  const onPhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPhone(e.target.value);
+  }
+
   return (
     <div className="bg-white/30 backdrop-blur-lg shadow-md rounded-2xl p-10 w-full max-w-2xl border border-gray-300">
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Account Settings</h1>
@@ -49,7 +64,7 @@ export function UserInfo() {
             type="text"
             value={id}
             readOnly 
-            className="w-full bg-gray-300/80 text-gray-500 uppercase px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
+            className="w-full bg-gray-300/80 text-gray-400 uppercase px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
           />
         </div>
         <div>
@@ -63,13 +78,43 @@ export function UserInfo() {
           />
         </div>
         <div>
+          <label htmlFor="user-firstname" className="block font-semibold mb-1">First Name:</label>
+          <input
+            id="user-firstname"
+            type="text"
+            value={firstName}
+            onChange={onFirstNameChange}
+            className="w-full bg-gray-300/80 text-gray-900 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
+          />
+        </div>
+        <div>
+          <label htmlFor="user-lastname" className="block font-semibold mb-1">Last Name:</label>
+          <input
+            id="user-lastname"
+            type="text"
+            value={lastName}
+            onChange={onLastNameChange}
+            className="w-full bg-gray-300/80 text-gray-900 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
+          />
+        </div>
+        <div>
+          <label htmlFor="user-phone" className="block font-semibold mb-1">Phone:</label>
+          <input
+            id="user-phone"
+            type="text"
+            value={phone}
+            onChange={onPhoneChange}
+            className="w-full bg-gray-300/80 text-gray-900 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
+          />
+        </div>
+        <div>
           <label htmlFor="user-role" className="block font-semibold mb-1">Role:</label>
           <input
             id="user-role"
             type="text"
             value={role?.toUpperCase()}
             readOnly
-            className="w-full bg-gray-300/80 text-gray-500 uppercase px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
+            className="w-full bg-gray-300/80 text-gray-400 uppercase px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
           />
         </div>
       </div>
