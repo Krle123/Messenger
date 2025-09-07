@@ -25,11 +25,7 @@ export const authApi: IAuthAPIService = {
     }
   },
 
-  async registration(
-    username: string,
-    password: string,
-    role: string
-  ): Promise<AuthResponse> {
+  async registration(username: string, password: string, role: string): Promise<AuthResponse> {
     try {
       const res = await axios.post<AuthResponse>(`${API_URL}/register`, {
         username,

@@ -1,4 +1,5 @@
 import type { UserDto } from "../../models/users/UserDto";
+import type { UserResponse } from "../../types/user/UserResponse";
 
 /**
  * Interfejs za korisnicki servis.
@@ -6,4 +7,5 @@ import type { UserDto } from "../../models/users/UserDto";
 export interface IUsersAPIService {
     getAllUsers(): Promise<UserDto[]>;
     getUserById(id: number): Promise<UserDto>;
+    updateUser(user: UserDto): Promise<UserResponse>;
 }

@@ -1,27 +1,44 @@
-import { jwtDecode } from "jwt-decode";
-import { useState } from "react";
-import { ReadValueByKey, DeleteValueByKey } from "../../helpers/local_storage";
+import { useEffect, useState } from "react";
+import { DeleteValueByKey } from "../../helpers/local_storage";
 import { useAuth } from "../../hooks/auth/useAuthHook";
 import { useNavigate } from "react-router-dom";
-import type { JwtTokenClaims } from "../../types/auth/JwtTokenClaims";
-import { userInfoAPI } from "../../api_services/info/UserInfoAPIService";
+import { usersApi } from "../../api_services/users/UsersAPIService";
+import { getLoggedInUser } from "../../helpers/loggedInUser";
 
 export function UserInfo() {
-  const token = ReadValueByKey("authToken");
   const { logout } = useAuth();
   const navigate = useNavigate();
-
-  if (!token) return null;
-
-  const { id: initialId, username: initialUsername, role } = jwtDecode<JwtTokenClaims>(token);
  
 
-  const id = initialId; 
-  const username = initialUsername; 
+  const [id, setId] = useState(0);
+  const [username, setUsername] = useState("");
+  const [role, setRole] = useState("");
   const [firstName, setFirstName] = useState(""); 
   const [lastName, setLastName] = useState(""); 
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+      const loggedUser = getLoggedInUser();
+      if (!loggedUser) {
+        setError("You must be logged in to access this page.");
+        return;
+      }
+      setId(loggedUser.id);
+      setUsername(loggedUser.username);
+      setRole(loggedUser.role);
+      usersApi.getUserById(loggedUser.id).then(user => {
+      setFirstName(user.firstName);
+      setLastName(user.lastName);
+      setPhone(user.phone);
+      setError("");
+      
+      }).catch(err => {
+        setError("Failed to fetch user details.");
+        console.error("Error fetching user details:", err);
+      });
+  }, []);
+      
 
   const handleLogout = () => {
     DeleteValueByKey("authToken");
@@ -32,7 +49,7 @@ export function UserInfo() {
   const handleSave =  async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response = await userInfoAPI.updateUserInfo(id, firstName, lastName, phone);
+    const response = await usersApi.updateUser({id, username, role, firstName, lastName, phone});
     if (response.success) {
       navigate('/select');
     }
@@ -54,23 +71,13 @@ export function UserInfo() {
 
       <div className="space-y-4 text-lg text-gray-800">
         <div>
-          <label htmlFor="user-id" className="block font-semibold mb-1">ID:</label>
-          <input
-            id="user-id"
-            type="text"
-            value={id}
-            readOnly 
-            className="w-full bg-gray-300/80 text-gray-400 uppercase px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
-          />
-        </div>
-        <div>
           <label htmlFor="user-username" className="block font-semibold mb-1">Username:</label>
           <input
             id="user-username"
             type="text"
             value={username}
             readOnly
-            className="w-full bg-gray-300/80 text-gray-400 uppercase px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
+            className="w-full bg-gray-300/80 text-gray-400 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
           />
         </div>
         <div>
@@ -78,7 +85,7 @@ export function UserInfo() {
           <input
             id="user-firstname"
             type="text"
-            value={firstName}
+            value={firstName ?? ""}
             onChange={(e) => setFirstName(e.target.value)}
             className="w-full bg-gray-300/80 text-gray-900 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
           />
@@ -88,7 +95,7 @@ export function UserInfo() {
           <input
             id="user-lastname"
             type="text"
-            value={lastName}
+            value={lastName ?? ""}
             onChange={(e) => setLastName(e.target.value)}
             className="w-full bg-gray-300/80 text-gray-900 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
           />
@@ -98,7 +105,7 @@ export function UserInfo() {
           <input
             id="user-phone"
             type="text"
-            value={phone}
+            value={phone ?? ""}
             onChange={(e) => setPhone(e.target.value)}
             className="w-full bg-gray-300/80 text-gray-900 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none"
           />
@@ -114,8 +121,8 @@ export function UserInfo() {
           />
         </div>
       </div>
-
-      <div className="flex gap-4 mt-8">
+      {error && <p className="text-md text-center text-red-700/80 font-medium">{error}</p>}
+      <div className="flex justify-center gap-4 mt-8">
         <button
           onClick={handleLogout}
           className="px-4 bg-red-700/60 hover:bg-red-700/70 text-white py-2 rounded-xl transition"

@@ -16,7 +16,10 @@ export class UserService implements IUserService {
 
   async getUserById(id: number): Promise<UserDto> {
     const user: User = await this.userRepository.getById(id);
-    return new UserDto(user.id, user.username, user.role);
+    console.log("User fetched in service:", user);
+    const userDto: UserDto = new UserDto(user.id, user.username, user.role, user.firstName, user.lastName, user.phone);
+    console.log("User DTO in service:", userDto);
+    return userDto
   }
   
   async getAllUsers(): Promise<UserDto[]> {
@@ -24,7 +27,11 @@ export class UserService implements IUserService {
     const usersDto: UserDto[] = users.map(
       (user) => new UserDto(user.id, user.username, user.role)
     );
-
     return usersDto;
+  }
+
+  async updateUser(userDto: UserDto): Promise<UserDto> {
+    const user: User = await this.userRepository.update(new User(userDto.id, userDto.username, userDto.role, "", userDto.firstName, userDto.lastName, userDto.phone));
+    return new UserDto(user.id, user.username, user.role, user.firstName, user.lastName, user.phone);
   }
 }

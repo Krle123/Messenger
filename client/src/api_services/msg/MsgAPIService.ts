@@ -1,8 +1,7 @@
 import axios from "axios";
 import type { IMsgAPIService } from "./IMsgAPIService";
-import type { MessageDto } from "../../models/msg/MessageDto";
 import type { MsgResponse } from "../../types/msg/MsgResponse";
-import type { UnreadDto } from "../../models/msg/UnreadDto";
+import type { UnreadResponse } from "../../types/msg/UnreadResponse";
 
 
 const API_URL: string = import.meta.env.VITE_API_URL;
@@ -22,10 +21,10 @@ export const msgAPI : IMsgAPIService =
         }
     },
 
-    async getConversation(idUser: number, idConversationPartner: number): Promise<MessageDto[]> {
+    async getConversation(idUser: number, idConversationPartner: number): Promise<MsgResponse> {
         try {
             console.log("Fetching conversation between", idUser, "and", idConversationPartner);
-            const res = await axios.get<MessageDto[]>(`${API_URL}messages/conversation/${idUser}/${idConversationPartner}`);
+            const res = await axios.get<MsgResponse>(`${API_URL}messages/conversation/${idUser}/${idConversationPartner}`);
             return res.data;
         } catch (error) {
             let message = "An error has occurred while fetching messages.";
@@ -33,7 +32,7 @@ export const msgAPI : IMsgAPIService =
                 message = error.response?.data?.message || message;
             }
             console.error(message);
-            return Promise.resolve([]);
+            return { success: false, message, data: undefined };
         }
     },
 
@@ -51,23 +50,23 @@ export const msgAPI : IMsgAPIService =
         }
     },
 
-    async getUnreadCount(idRcv: number): Promise<UnreadDto[]> {
+    async getUnreadCount(idRcv: number): Promise<UnreadResponse> {
         try {
-            const res = axios.get<UnreadDto[]>(`${API_URL}messages/unread/${idRcv}`);
-            return res.then(response => response.data);
+            const res = await axios.get<UnreadResponse>(`${API_URL}messages/unread/${idRcv}`);
+            return res.data;
         } catch (error) {
             let message = "An error has occurred while fetching unread messages.";
             if (axios.isAxiosError(error)) {
                 message = error.response?.data?.message || message;
             }
             console.error(message);
-            return Promise.resolve([]);
+            return { success: false, message, data: undefined };
         }
     },
 
-    async getContactList(idRcv: number): Promise<number[] | null> {
+    async getContactList(idRcv: number): Promise<MsgResponse> {
         try {
-            const res = axios.get<number[]>(`${API_URL}messages/contacts/${idRcv}`);
+            const res = axios.get<MsgResponse>(`${API_URL}messages/contacts/${idRcv}`);
             return res.then(response => response.data);
         } catch (error) {
             let message = "An error has occurred while fetching the contact list.";
@@ -75,7 +74,7 @@ export const msgAPI : IMsgAPIService =
                 message = error.response?.data?.message || message;
             }
             console.error(message);
-            return Promise.resolve(null);
+            return { success: false, message, data: undefined };
         }
     }
 }

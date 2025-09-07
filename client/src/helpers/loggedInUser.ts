@@ -5,7 +5,7 @@ import { ReadValueByKey } from "./local_storage";
 export interface LoggedInUser {
   id: number;
   username: string;
-  role?: string;
+  role: string;
 }
 
 export function getLoggedInUser(): LoggedInUser {
@@ -19,5 +19,5 @@ export function getLoggedInUser(): LoggedInUser {
       console.error("Failed to decode JWT:", error);
     }
   }
-  return { id: 0, username: "" };
+  return { id: 0, username: "", role: "" };
 }

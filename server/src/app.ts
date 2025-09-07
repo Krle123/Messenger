@@ -10,7 +10,7 @@ import { UserService } from './Services/users/UserService';
 import { UserController } from './WebAPI/controllers/UserController';
 import { MessageRepository } from './Database/repositories/messages/MessageRepository';
 import { IMsgService } from './Domain/services/msg/IMsgService';
-import { MsgService } from './Services/MsgService.ts/MsgService';
+import { MsgService } from './Services/msg/MsgService';
 import { MsgController } from './WebAPI/controllers/MsgController';
 import { IMessageRepository } from './Domain/repositories/messages/IMessageRepository';
 

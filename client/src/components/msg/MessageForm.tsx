@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { dataValidationMessage } from "../../api_services/validators/msg/MessageValidator";
 import type { MsgFormProps } from "../../types/props/msg_form_props/MsgFormProps";
 import { getLoggedInUser } from "../../helpers/loggedInUser";
 
@@ -7,7 +6,6 @@ export function MessageForm({msgApi, otherUserId}: MsgFormProps) {
     const [idRcv, setIdRcv] = useState(1);
     const [idSnd, setIdSnd] = useState(2);
     const [messageContent, setMessageContent] = useState("");
-    const [error, setError] = useState("");
 
 
     const handleSend = async (e?: React.FormEvent) => {
@@ -20,13 +18,8 @@ export function MessageForm({msgApi, otherUserId}: MsgFormProps) {
 
     useEffect(() => {
         const user = getLoggedInUser();
-        if (user) {
-            setIdSnd(user.id);                                             
-            setIdRcv(otherUserId);
-        }
-        else {
-            setError("User not logged in");
-        }
+        setIdSnd(user.id);                                             
+        setIdRcv(otherUserId);
     }, []);
 
   return (

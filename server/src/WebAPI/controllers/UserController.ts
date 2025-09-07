@@ -15,20 +15,14 @@ export class UserController {
   }
 
   private initializeRoutes(): void {
-    // ostale metode, npr. /api/v1/user/1 <--- user po ID-ju 1
     this.router.get("/users", this.users.bind(this));
-    this.router.get("/user", this.getUserById.bind(this));
+    this.router.get("/user:id", this.getUserById.bind(this));
+    this.router.put("/update", this.updateUser.bind(this));
   }
 
-  /**
-   * GET /api/v1/users
-   * Svi korisnici
-   */
   private async users(req: Request, res: Response): Promise<void> {
     try {
-      const usersData: UserDto[] =
-        await this.userService.getAllUsers();
-      console.log("Users fetched:", usersData);
+      const usersData: UserDto[] = await this.userService.getAllUsers();
       res.status(200).json(usersData);
       return;
     } catch (error) {
@@ -40,9 +34,11 @@ export class UserController {
     try {
       const id = parseInt(req.params.id, 10);
       const userData: UserDto = await this.userService.getUserById(id);
+      console.log("User data retrieved:", userData);
+
 
       if (userData) {
-        res.status(200).json(userData);
+        res.status(200).json({success: true, message: 'User not found', data: userData});
         return;
       }
       res.status(404).json({ success: false, message: 'User not found' });
@@ -52,26 +48,22 @@ export class UserController {
       res.status(500).json({ success: false, message: error });
     }
   }
-  private async ContactList(req: Request, res: Response): Promise<void> 
-  {
+
+  private async updateUser(req: Request, res: Response): Promise<void> {
     try {
-      const { role } = req.body;
-      const result = await this.userService.getAllRole(role);
-      if(result.length > 0) {
-        res.status(200).json({ success: true, message: 'Contact list fetched successfully', data: result });
+      const userDto: UserDto = req.body;
+      const updatedUser: UserDto = await this.userService.updateUser(userDto);
+      if (updatedUser) {
+        res.status(200).json({success: true, message: '', data: updatedUser});
         return;
       }
-      res.status(200).json({ success: true, message: 'No contacts found', data: result });
+      res.status(404).json({ success: false, message: 'User not found' });
       return;
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+      res.status(500).json({ success: false, message: error });
     }
   }
 
-  /**
-   * Getter za router
-   */
   public getRouter(): Router {
     return this.router;
   }

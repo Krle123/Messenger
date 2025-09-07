@@ -8,19 +8,19 @@ export class UserRepository implements IUserRepository {
     try {
       
       const query = `
-        INSERT INTO users (username, role, password, firstname, surname, phone) 
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO users (username, role, password) 
+        VALUES (?, ?, ?)
       `;
 
       const [result] = await db.execute<ResultSetHeader>(query, [
         user.username,
         user.role,
-        user.password
+        user.password,
       ]);
 
 
       if (result.insertId) {  
-        return new User(result.insertId, user.username, user.role, user.password, user.firstName, user.lastName, user.phone);
+        return new User(result.insertId, user.username, user.role, user.password, "-", "-", "-");
       }
       return new User();
     } catch (error) {
@@ -48,7 +48,7 @@ export class UserRepository implements IUserRepository {
   async getByUsername(username: string): Promise<User> {
     try {
       const query = `
-        SELECT id, username, role, password
+        SELECT id, username, role, password, firstName, lastName, phone
         FROM users 
         WHERE username = ?
       `;
@@ -57,12 +57,11 @@ export class UserRepository implements IUserRepository {
 
       if (rows.length > 0) {
         const row = rows[0];
-        return new User(row.id, row.username, row.role, row.password);
+        return new User(row.id, row.username, row.role, row.password, row.firstName, row.lastName, row.phone);
       }
 
       return new User();
     } catch (error) {
-      console.log("user get by username: " + error);
       return new User();
     }
   }
@@ -79,6 +78,7 @@ export class UserRepository implements IUserRepository {
     }
 
     }
+
   async getAll(): Promise<User[]> {
     try {
       const query = `SELECT *FROM users ORDER BY id ASC`;
@@ -96,18 +96,16 @@ export class UserRepository implements IUserRepository {
     try {
       const query = `
         UPDATE users 
-        SET username = ?, password = ?, firstName = ?, lastName = ?, phone = ?
+        SET username = ?, firstName = ?, lastName = ?, phone = ?
         WHERE id = ?
       `;
 
       const [result] = await db.execute<ResultSetHeader>(query, [
         user.username,
-        user.password,
-        user.role,
         user.firstName,
         user.lastName,
         user.phone,
-        user.id,
+        user.id
       ]);
 
       if (result.affectedRows > 0) {

@@ -19,4 +19,11 @@ export interface IUserService {
    * @returns Podatke o korisnicima sa specificnom ulogom u vidu liste.
    */
   getAllRole(role: string): Promise<UserDto[]>;
+
+  /**
+   * Ažurira informacije o korisniku.
+   * @param user - Podaci o korisniku koji se ažuriraju.
+   * @returns Ažurirane podatke o korisniku.
+   */
+  updateUser(user: UserDto): Promise<UserDto>;
 }

@@ -4,7 +4,7 @@ import { getLoggedInUser, type LoggedInUser } from "../../helpers/loggedInUser";
 import type { MessageDto } from "../../models/msg/MessageDto";
 
 export function Messages({msgApi, otherUserId}: MsgFormProps) {
-    const [user, setUser] = useState<LoggedInUser>({id: 0, username: ""});
+    const [user, setUser] = useState<LoggedInUser>({ id: 0, username: "", role: "" });
     const [error, setError] = useState("");
     const [messages, setMessages] = useState<MessageDto[]>([]);
 
@@ -32,8 +32,12 @@ export function Messages({msgApi, otherUserId}: MsgFormProps) {
             }
             const conv = await msgApi.getConversation(currentUser.id, otherUserId);
             const convData = conv.data;
+            if (!conv.success || !convData) {
+                setError(conv.message || "Failed to fetch messages");
+                return;
+            }
             for (let i = 0; i < convData.length; i++) {
-                if (convData[i].idRcv === currentUser.id && !convData[i].isRead) {
+                if (convData[i].idRcv === currentUser.id && !convData[i].msgRead) {
                     await msgApi.markAsRead(convData[i].id);
                 }
             if (conv) {
