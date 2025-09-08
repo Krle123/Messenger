@@ -7,14 +7,11 @@ export function Messages({msgApi, otherUserId}: MsgFormProps) {
     const [user, setUser] = useState<LoggedInUser>({ id: 0, username: "", role: "" });
     const [error, setError] = useState("");
     const [messages, setMessages] = useState<MessageDto[]>([]);
-
-      const messagesEndRef = useRef<HTMLDivElement | null>(null);
+    const intitialScroll = useRef(false);
       
     useEffect(() => {
-      if (messagesEndRef.current) {
-        messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-    }, [messages]);
+        intitialScroll.current = false;
+    }, [otherUserId]);
 
     useEffect(() => {
         const currentUser = getLoggedInUser();
@@ -42,7 +39,6 @@ export function Messages({msgApi, otherUserId}: MsgFormProps) {
                 }
             if (conv) {
             setMessages(convData);
-            console.log("API response:", conv);
             }
             else {
             setError("Failed to fetch messages");
@@ -52,13 +48,11 @@ export function Messages({msgApi, otherUserId}: MsgFormProps) {
 
       fetchConversation();
 
-      const interval = setInterval(fetchConversation, 200);
+      const interval = setInterval(fetchConversation, 500);
       return () => clearInterval(interval);
 
     }, [msgApi, otherUserId]);
-    
 
-if (!messages.length) return <div className="p-4">Loading...</div>;
 return (
   <div className="flex-1 p-4 overflow-y-auto space-y-3">
   {messages.map((msg) => (
@@ -77,7 +71,6 @@ return (
       </div>
     </div>
   ))}
-  <div ref={messagesEndRef} />
 </div>
 );
 }

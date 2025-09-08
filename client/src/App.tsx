@@ -15,32 +15,22 @@ import { msgAPI } from "./api_services/msg/MsgAPIService";
 import { ChatSelection } from "./pages/chat/ChatSelectionPage";
 import { AccountPage } from "./pages/account/AccountPage";
 
-/*        <Route
-          path="/admin-dashboard"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <ControlpPanelAdminPage usersApi={usersApi} /> 
-            </ProtectedRoute>
-          }
-        /> 
-        */
-
 function App() {
   return (
     <Routes>
       <Route path="/home" element={<HomePage />} />
       <Route path="/login" element={<LoginPage authApi={authApi} />} />
       <Route path="/register" element={<RegistrationPage authApi={authApi} />} />
-      <Route path="/chat" element={<ChatPage msgApi={msgAPI} />} />
-      <Route path="/select" element={<ChatSelection usersApi={usersApi} msgApi={msgAPI} />} />
-      <Route path="/account" element={<AccountPage/>} />
+      <Route path="/chat" element={<ProtectedRoute requiredRole="">
+        <ChatPage msgApi={msgAPI} /></ProtectedRoute>} />
+      <Route path="/select" element={<ProtectedRoute requiredRole="">
+        <ChatSelection usersApi={usersApi} msgApi={msgAPI} /></ProtectedRoute>} />
+      <Route path="/account" element={<ProtectedRoute requiredRole=""><AccountPage/></ProtectedRoute>} />
       <Route path="/404" element={<NotFoundPage />} />
 
-        {/* Preusmerava na dashboard kao default rutu */}
-        <Route path="/" element={<Navigate to="/home" replace />} />
+      <Route path="/" element={<Navigate to="/home" replace />} />
 
-        {/* Catch-all ruta za nepostojeće stranice */}
-        <Route path="*" element={<NotFoundPage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }

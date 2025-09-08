@@ -4,6 +4,7 @@ import { useAuth } from "../../hooks/auth/useAuthHook";
 import { useNavigate } from "react-router-dom";
 import { usersApi } from "../../api_services/users/UsersAPIService";
 import { getLoggedInUser } from "../../helpers/loggedInUser";
+import { dataValidationAccount } from "../../api_services/validators/users/AccountValidator";
 
 export function UserInfo() {
   const { logout } = useAuth();
@@ -48,6 +49,12 @@ export function UserInfo() {
 
   const handleSave =  async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const validation = dataValidationAccount(firstName, lastName, phone);
+    if (!validation.success) {
+      setError(validation.message ?? "Invalid data");
+      return;
+    }
 
     const response = await usersApi.updateUser({id, username, role, firstName, lastName, phone});
     if (response.success) {

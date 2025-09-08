@@ -7,9 +7,9 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(50) UNIQUE NOT NULL,
     role VARCHAR(15) NOT NULL,
     password VARCHAR(500) NOT NULL,
-    firstName VARCHAR(50) NOT NULL DEFAULT '-',
-    lastName VARCHAR(50) NOT NULL DEFAULT '-',
-    phone VARCHAR(15) NOT NULL DEFAULT '-'
+    firstName VARCHAR(50) NOT NULL DEFAULT '',
+    lastName VARCHAR(50) NOT NULL DEFAULT '',
+    phone VARCHAR(15) NOT NULL DEFAULT ''
 );
 
 CREATE TABLE IF NOT EXISTS messages (
@@ -20,16 +20,3 @@ CREATE TABLE IF NOT EXISTS messages (
     msgTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     msgRead BOOL NOT NULL DEFAULT false
 );
-
--- kad se izabere korisnik sa kojim pricamo
-SELECT *
-FROM messages
-WHERE (idRcv = var1 AND idSnd = var2) OR (idRcv = var2 AND idSnd = var1)
-
--- neprocitane poruke u meniju
-SELECT *
-FROM messages
-WHERE idRcv = var1 AND NOT msgRead
-
-INSERT INTO messages (idRcv, idSnd, messageContent) 
-VALUES (?, ?, ?)
