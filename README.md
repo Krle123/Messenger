@@ -6,3 +6,4 @@ Pri prvom pokretanju treba duze da se ucitaju same poruke zbog bootleg nacina na
 Koriscene protected rute, i dodata 404 stranica.
 Svi podaci su cuvaju u MySQL bazi podataka, nesifrovani, osim same lozinke koja prolazi kroz cryptovanje pre slanja u bazu. ID nije GUID zbog jednostavnosti.
 Koriscen typescript.
+U trenutnom semestru cu raditi slican projekat ali poprilicno nadogradjen, bice radjen na isti nacin, ali u electron-u, sa 2fa i sifrovanjem svih podataka kao i boljom sigurnoscu.
